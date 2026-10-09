@@ -1,0 +1,58 @@
+{% extends "layouts/main.html.twig" %}
+{% block title %}Ciudades{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-0">Ciudades</h2>
+        <span class="text-muted">Ubicaciones y plazas de atención a clientes</span>
+    </div>
+    <a href="{{ base_url }}/city/new" class="btn btn-primary shadow-sm">
+        <i class="bi bi-plus-circle me-1"></i> Nueva Ciudad
+    </a>
+</div>
+
+<div class="card shadow-sm border-0">
+    <div class="card-header bg-white py-3">
+        <h5 class="card-title mb-0 fw-bold"><i class="bi bi-geo-alt me-2 text-primary"></i>Listado de Ciudades</h5>
+    </div>
+    <div class="card-body p-0">
+        {% if cities|length > 0 %}
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-3" style="width: 100px;"># ID</th>
+                            <th>Nombre de la Ciudad</th>
+                            <th class="text-end pe-3" style="width: 150px;">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for c in cities %}
+                            <tr>
+                                <td class="ps-3 fw-bold">#{{ c.id }}</td>
+                                <td>{{ c.name }}</td>
+                                <td class="text-end pe-3">
+                                    <a href="{{ base_url }}/city/{{ c.id }}/edit" class="btn btn-warning btn-sm" title="Editar">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <form action="{{ base_url }}/city/{{ c.id }}/delete" method="POST" class="d-inline" onsubmit="return confirm('¿Seguro que deseas eliminar esta ciudad?');">
+                                        {{ csrf_field() }}
+                                        <button type="submit" class="btn btn-danger btn-sm" title="Eliminar">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="p-4 text-center text-muted">
+                No hay ciudades registradas.
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

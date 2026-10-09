@@ -5,6 +5,7 @@
 // Model.php
 // @brief agrego la clase Model para reducir las lineas de los modelos
 
+#[\AllowDynamicProperties]
 class Model {
 
 	public static function exists($modelname){
@@ -17,7 +18,7 @@ class Model {
 	}
 
 	public static function getFullpath($modelname){
-		return "core/app/model/".$modelname.".php";
+		return dirname(__DIR__) . "/app/model/".$modelname.".php";
 	}
 
 	public static function many($query,$aclass){

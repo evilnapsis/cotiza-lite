@@ -1,4 +1,5 @@
 <?php
+#[\AllowDynamicProperties]
 class SettingData {
 	public static $tablename = "setting";
 
@@ -47,7 +48,13 @@ class SettingData {
 	public static function getByPreffix($id){
 		$sql = "select * from ".self::$tablename." where name=\"$id\"";
 		$query = Executor::doit($sql);
-		return Model::one($query[0],new SettingData());
+		$res = Model::one($query[0],new SettingData());
+		if($res == null){
+			$res = new SettingData();
+			$res->name = $id;
+			$res->val = "";
+		}
+		return $res;
 	}
 
 

@@ -1,0 +1,80 @@
+{% extends "layouts/main.html.twig" %}
+{% block title %}Usuarios{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-0">Usuarios</h2>
+        <span class="text-muted">Cuentas con acceso al sistema y roles</span>
+    </div>
+    <a href="{{ base_url }}/user/new" class="btn btn-primary shadow-sm">
+        <i class="bi bi-person-plus me-1"></i> Nuevo Usuario
+    </a>
+</div>
+
+<div class="card shadow-sm border-0">
+    <div class="card-header bg-white py-3">
+        <h5 class="card-title mb-0 fw-bold"><i class="bi bi-shield-lock me-2 text-primary"></i>Listado de Cuentas</h5>
+    </div>
+    <div class="card-body p-0">
+        {% if users|length > 0 %}
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-3" style="width: 80px;"># ID</th>
+                            <th>Nombre Completo</th>
+                            <th>Usuario / Email</th>
+                            <th>Rol</th>
+                            <th>Estado</th>
+                            <th>Fecha Registro</th>
+                            <th class="text-end pe-3" style="width: 150px;">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for u in users %}
+                            <tr>
+                                <td class="ps-3 fw-bold">#{{ u.id }}</td>
+                                <td class="fw-semibold">{{ u.name }} {{ u.lastname }}</td>
+                                <td>{{ u.email }}</td>
+                                <td>
+                                    {% if u.kind == 1 %}
+                                        <span class="badge bg-danger">Administrador</span>
+                                    {% else %}
+                                        <span class="badge bg-info text-dark">Usuario</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if u.status == 1 %}
+                                        <span class="badge bg-success">Activo</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">Inactivo</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ u.created_at }}</td>
+                                <td class="text-end pe-3">
+                                    <a href="{{ base_url }}/user/{{ u.id }}/edit" class="btn btn-warning btn-sm" title="Editar">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    {% if u.id != session.user_id %}
+                                        <form action="{{ base_url }}/user/{{ u.id }}/delete" method="POST" class="d-inline" onsubmit="return confirm('¿Seguro que deseas eliminar a este usuario?');">
+                                            {{ csrf_field() }}
+                                            <button type="submit" class="btn btn-danger btn-sm" title="Eliminar">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="p-4 text-center text-muted">
+                No hay usuarios registrados.
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

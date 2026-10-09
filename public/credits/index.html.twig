@@ -1,0 +1,58 @@
+{% extends "layouts/main.html.twig" %}
+{% block title %}Tipos de Crédito{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-0">Tipos de Crédito</h2>
+        <span class="text-muted">Plazos y modalidades de financiamiento comercial</span>
+    </div>
+    <a href="{{ base_url }}/credit/new" class="btn btn-primary shadow-sm">
+        <i class="bi bi-plus-circle me-1"></i> Nuevo Tipo de Crédito
+    </a>
+</div>
+
+<div class="card shadow-sm border-0">
+    <div class="card-header bg-white py-3">
+        <h5 class="card-title mb-0 fw-bold"><i class="bi bi-credit-card me-2 text-primary"></i>Listado de Tipos de Crédito</h5>
+    </div>
+    <div class="card-body p-0">
+        {% if credits|length > 0 %}
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-3" style="width: 100px;"># ID</th>
+                            <th>Modalidad de Crédito</th>
+                            <th class="text-end pe-3" style="width: 150px;">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for cr in credits %}
+                            <tr>
+                                <td class="ps-3 fw-bold">#{{ cr.id }}</td>
+                                <td>{{ cr.name }}</td>
+                                <td class="text-end pe-3">
+                                    <a href="{{ base_url }}/credit/{{ cr.id }}/edit" class="btn btn-warning btn-sm" title="Editar">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <form action="{{ base_url }}/credit/{{ cr.id }}/delete" method="POST" class="d-inline" onsubmit="return confirm('¿Seguro que deseas eliminar este tipo de crédito?');">
+                                        {{ csrf_field() }}
+                                        <button type="submit" class="btn btn-danger btn-sm" title="Eliminar">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="p-4 text-center text-muted">
+                No hay tipos de crédito registrados.
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

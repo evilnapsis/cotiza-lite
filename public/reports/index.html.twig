@@ -1,0 +1,114 @@
+{% extends "layouts/main.html.twig" %}
+{% block title %}Reporte de Cotizaciones{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-0">Reporte de Cotizaciones</h2>
+        <span class="text-muted">Filtrado analítico por rango de fechas y exportación a Excel</span>
+    </div>
+</div>
+
+<!-- Filtro de Búsqueda -->
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-header bg-white py-3">
+        <h5 class="card-title mb-0 fw-bold"><i class="bi bi-funnel me-2 text-primary"></i>Filtro por Rango de Fechas</h5>
+    </div>
+    <div class="card-body p-4">
+        <form method="GET" action="{{ base_url }}/reports">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">Fecha Inicial</label>
+                    <input type="date" name="start_at" class="form-control" value="{{ start_at }}" required>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">Fecha Final</label>
+                    <input type="date" name="finish_at" class="form-control" value="{{ finish_at }}" required>
+                </div>
+                <div class="col-md-4 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary flex-grow-1">
+                        <i class="bi bi-search me-1"></i> Filtrar Cotizaciones
+                    </button>
+                    {% if start_at and finish_at and results|length > 0 %}
+                        <a href="{{ base_url }}/reports/excel?start={{ start_at }}&finish={{ finish_at }}" class="btn btn-success fw-semibold" title="Descargar archivo Excel">
+                            <i class="bi bi-file-earmark-excel me-1"></i> Excel (.xlsx)
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Tabla de Resultados -->
+{% if start_at and finish_at %}
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0 fw-bold">
+                <i class="bi bi-table me-2 text-primary"></i>Resultados encontrados: {{ results|length }}
+            </h5>
+            {% if results|length > 0 %}
+                <a href="{{ base_url }}/reports/excel?start={{ start_at }}&finish={{ finish_at }}" class="btn btn-outline-success btn-sm fw-semibold">
+                    <i class="bi bi-download me-1"></i> Descargar Reporte (.xlsx)
+                </a>
+            {% endif %}
+        </div>
+        <div class="card-body p-0">
+            {% if results|length > 0 %}
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="ps-3"># Folio</th>
+                                <th>Cliente</th>
+                                <th>Total</th>
+                                <th>Estado</th>
+                                <th>Fecha</th>
+                                <th class="text-end pe-3">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% set sum_total = 0 %}
+                            {% for cot in results %}
+                                {% set sum_total = sum_total + cot.total %}
+                                <tr>
+                                    <td class="ps-3 fw-bold">
+                                        <a href="{{ base_url }}/cotization/{{ cot.id }}/edit">#{{ cot.id }}</a>
+                                    </td>
+                                    <td>{{ cot.client_name }}</td>
+                                    <td class="fw-bold text-success">$ {{ cot.total|number_format(2, '.', ',') }}</td>
+                                    <td>
+                                        <span class="badge badge-status-{{ cot.status_id }} px-2 py-1">
+                                            {{ cot.status_name }}
+                                        </span>
+                                    </td>
+                                    <td>{{ cot.created_at }}</td>
+                                    <td class="text-end pe-3">
+                                        <a href="{{ base_url }}/cotization/{{ cot.id }}/pdf" target="_blank" class="btn btn-outline-secondary btn-sm" title="Imprimir PDF">
+                                            <i class="bi bi-printer"></i>
+                                        </a>
+                                        <a href="{{ base_url }}/cotization/{{ cot.id }}/edit" class="btn btn-warning btn-sm" title="Ver / Editar">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            <tr class="table-secondary fw-bold">
+                                <td colspan="2" class="ps-3">GRAN TOTAL DEL PERÍODO:</td>
+                                <td class="text-success fs-6">$ {{ sum_total|number_format(2, '.', ',') }}</td>
+                                <td colspan="3"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="p-5 text-center text-muted">
+                    <i class="bi bi-calendar-x fs-1 d-block mb-3 text-secondary"></i>
+                    <h5>No se encontraron cotizaciones en el rango seleccionado</h5>
+                    <p class="mb-0">Prueba ajustando las fechas del filtro.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endif %}
+{% endblock %}

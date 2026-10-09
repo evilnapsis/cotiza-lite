@@ -1,0 +1,71 @@
+{% extends "layouts/main.html.twig" %}
+{% block title %}Servicios y Productos{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-0">Servicios y Productos</h2>
+        <span class="text-muted">Catálogo de conceptos y tarifas cotizables</span>
+    </div>
+    <div>
+        <a href="{{ base_url }}/service/new" class="btn btn-success shadow-sm">
+            <i class="bi bi-plus-circle me-1"></i> Nuevo Servicio
+        </a>
+    </div>
+</div>
+
+<div class="card shadow-sm border-0">
+    <div class="card-header bg-white py-3">
+        <h5 class="card-title mb-0 fw-bold"><i class="bi bi-box-seam me-2 text-primary"></i>Catálogo de Servicios</h5>
+    </div>
+    <div class="card-body p-0">
+        {% if services|length > 0 %}
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-3">Código</th>
+                            <th>Nombre del Concepto / Servicio</th>
+                            <th>Tipo de Servicio</th>
+                            <th>Categoría</th>
+                            <th>Precio / Importe</th>
+                            <th class="text-end pe-3">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for srv in services %}
+                            <tr>
+                                <td class="ps-3 fw-semibold">{{ srv.code ?: ('#' ~ srv.id) }}</td>
+                                <td class="fw-bold">{{ srv.name }}</td>
+                                <td><span class="badge bg-light text-dark border">{{ srv.kind ?: 'General' }}</span></td>
+                                <td><span class="badge bg-secondary">{{ srv.category_name }}</span></td>
+                                <td class="fw-bold text-success fs-6">$ {{ srv.amount|number_format(2, '.', ',') }}</td>
+                                <td class="text-end pe-3">
+                                    <a href="{{ base_url }}/service/{{ srv.id }}/edit" class="btn btn-warning btn-sm" title="Editar">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <form action="{{ base_url }}/service/{{ srv.id }}/delete" method="POST" class="d-inline" onsubmit="return confirm('¿Seguro que deseas eliminar este servicio?');">
+                                        {{ csrf_field() }}
+                                        <button type="submit" class="btn btn-danger btn-sm" title="Eliminar">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="p-5 text-center text-muted">
+                <i class="bi bi-inbox fs-1 d-block mb-3 text-secondary"></i>
+                <h5>No hay servicios registrados</h5>
+                <p class="mb-3">Agrega conceptos o productos a tu catálogo para cotizar.</p>
+                <a href="{{ base_url }}/service/new" class="btn btn-success">
+                    <i class="bi bi-plus-circle me-1"></i> Registrar Servicio
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

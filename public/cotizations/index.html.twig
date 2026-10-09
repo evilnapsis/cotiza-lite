@@ -1,0 +1,82 @@
+{% extends "layouts/main.html.twig" %}
+{% block title %}Cotizaciones{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-0">Cotizaciones</h2>
+        <span class="text-muted">Historial y control de presupuestos emitidos</span>
+    </div>
+    <div>
+        <a href="{{ base_url }}/cotization/new" class="btn btn-warning fw-semibold shadow-sm">
+            <i class="bi bi-plus-circle me-1"></i> Nueva Cotización
+        </a>
+    </div>
+</div>
+
+<div class="card shadow-sm border-0">
+    <div class="card-header bg-white py-3">
+        <h5 class="card-title mb-0 fw-bold"><i class="bi bi-list-ul me-2 text-primary"></i>Listado de Cotizaciones</h5>
+    </div>
+    <div class="card-body p-0">
+        {% if cotizations|length > 0 %}
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-3"># Folio</th>
+                            <th>Cliente</th>
+                            <th>Total</th>
+                            <th>Estado</th>
+                            <th>Fecha de Emisión</th>
+                            <th class="text-end pe-3">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for cot in cotizations %}
+                            <tr>
+                                <td class="ps-3 fw-bold">
+                                    <a href="{{ base_url }}/cotization/{{ cot.id }}/edit" class="text-decoration-none">
+                                        #{{ cot.id }}
+                                    </a>
+                                </td>
+                                <td>{{ cot.client_name }}</td>
+                                <td class="fw-bold text-success fs-6">$ {{ cot.total|number_format(2, '.', ',') }}</td>
+                                <td>
+                                    <span class="badge badge-status-{{ cot.status_id }} px-2 py-1">
+                                        {{ cot.status_name }}
+                                    </span>
+                                </td>
+                                <td>{{ cot.created_at }}</td>
+                                <td class="text-end pe-3">
+                                    <a href="{{ base_url }}/cotization/{{ cot.id }}/pdf" target="_blank" class="btn btn-outline-secondary btn-sm" title="Imprimir PDF">
+                                        <i class="bi bi-printer"></i>
+                                    </a>
+                                    <a href="{{ base_url }}/cotization/{{ cot.id }}/edit" class="btn btn-warning btn-sm" title="Editar / Agregar Ítems">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <form action="{{ base_url }}/cotization/{{ cot.id }}/delete" method="POST" class="d-inline" onsubmit="return confirm('¿Seguro que deseas eliminar la cotización #{{ cot.id }}? Esta acción no se puede deshacer.');">
+                                        {{ csrf_field() }}
+                                        <button type="submit" class="btn btn-danger btn-sm" title="Eliminar">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="p-5 text-center text-muted">
+                <i class="bi bi-file-earmark-x fs-1 d-block mb-3 text-secondary"></i>
+                <h5>No se encontraron cotizaciones</h5>
+                <p class="mb-3">Comienza creando tu primera cotización en el sistema.</p>
+                <a href="{{ base_url }}/cotization/new" class="btn btn-primary">
+                    <i class="bi bi-plus-circle me-1"></i> Crear Cotización
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

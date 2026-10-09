@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>{% block title %}Inicio{% endblock %} - COTIZA LITE 2</title>
+
+    <link rel="stylesheet" href="{{ base_url }}/vendors/simplebar/css/simplebar.css">
+    <link rel="stylesheet" href="{{ base_url }}/assets/css/vendors/simplebar.css">
+    <link rel="stylesheet" href="{{ base_url }}/assets/css/style.css">
+    <link rel="stylesheet" href="{{ base_url }}/assets/bootstrap-icons/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    
+    <script src="{{ base_url }}/assets/jquery/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        .sidebar-brand-full { font-weight: 700; font-size: 1.2rem; color: #fff; text-decoration: none; }
+        .table-responsive { border-radius: 6px; }
+        .badge-status-1 { background-color: #ffc107; color: #000; }
+        .badge-status-2 { background-color: #0dcaf0; color: #000; }
+        .badge-status-3 { background-color: #198754; color: #fff; }
+    </style>
+</head>
+<body>
+    <!-- Sidebar CoreUI -->
+    <div class="sidebar sidebar-dark sidebar-fixed" id="sidebar">
+        <div class="sidebar-brand d-none d-md-flex">
+            <a href="{{ base_url }}/" class="sidebar-brand-full text-white text-decoration-none">
+                <i class="bi bi-receipt me-2 text-warning"></i><b>COTIZA</b> <span class="badge bg-warning text-dark">LITE</span>
+            </a>
+            <div class="sidebar-brand-narrow"><b>CL</b></div>
+        </div>
+
+        <ul class="sidebar-nav" data-coreui="navigation" data-simplebar="">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ base_url }}/">
+                    <i class="nav-icon bi bi-speedometer2"></i> Inicio
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="{{ base_url }}/cotizations">
+                    <i class="nav-icon bi bi-file-earmark-text"></i> Cotizaciones
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="{{ base_url }}/clients">
+                    <i class="nav-icon bi bi-people"></i> Clientes
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="{{ base_url }}/services">
+                    <i class="nav-icon bi bi-box-seam"></i> Servicios
+                </a>
+            </li>
+
+            <li class="nav-group">
+                <a class="nav-link nav-group-toggle" href="#">
+                    <i class="nav-icon bi bi-graph-up"></i> Reportes
+                </a>
+                <ul class="nav-group-items">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ base_url }}/reports">
+                            <span class="nav-icon"><i class="bi bi-dot"></i></span> Reporte de Cotizaciones
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="nav-title">ADMINISTRACIÓN</li>
+
+            <li class="nav-group">
+                <a class="nav-link nav-group-toggle" href="#">
+                    <i class="nav-icon bi bi-gear"></i> Configuración
+                </a>
+                <ul class="nav-group-items">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ base_url }}/categories">
+                            <span class="nav-icon"><i class="bi bi-dot"></i></span> Categorías
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ base_url }}/cities">
+                            <span class="nav-icon"><i class="bi bi-dot"></i></span> Ciudades
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ base_url }}/credits">
+                            <span class="nav-icon"><i class="bi bi-dot"></i></span> Tipos de Crédito
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ base_url }}/formas">
+                            <span class="nav-icon"><i class="bi bi-dot"></i></span> Formas de Pago
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ base_url }}/users">
+                            <span class="nav-icon"><i class="bi bi-dot"></i></span> Usuarios
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ base_url }}/settings">
+                            <span class="nav-icon"><i class="bi bi-dot"></i></span> Ajustes Empresa
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <button class="sidebar-toggler" type="button" data-coreui-toggle="unfoldable"></button>
+    </div>
+
+    <!-- Main Wrapper -->
+    <div class="wrapper d-flex flex-column min-vh-100 bg-light">
+        <header class="header header-sticky mb-4">
+            <div class="container-fluid">
+                <button class="header-toggler px-md-0 me-md-3" type="button" onclick="coreui.Sidebar.getInstance(document.querySelector('#sidebar')).toggle()">
+                    <i class="bi bi-list fs-4"></i>
+                </button>
+                <a class="header-brand d-md-none fw-bold" href="{{ base_url }}/">
+                    COTIZA LITE
+                </a>
+                
+                <ul class="header-nav ms-auto">
+                    <li class="nav-item d-flex align-items-center me-3 text-secondary">
+                        <i class="bi bi-person-circle me-1 fs-5"></i>
+                        <span>{{ session.user_name ?? 'Administrador' }}</span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-outline-danger btn-sm" href="{{ base_url }}/logout" title="Cerrar Sesión">
+                            <i class="bi bi-box-arrow-right me-1"></i> Salir
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </header>
+
+        <div class="body flex-grow-1 px-3">
+            <div class="container-fluid">
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+
+        <footer class="footer mt-auto py-3 bg-white border-top text-center text-muted">
+            <div class="container-fluid d-flex justify-content-between">
+                <span><b><a target="_blank" href="https://evilnapsis.com">Evilnapsis</a></b> &copy; {{ "now"|date("Y") }} </span>
+                <span>v2.0</span>
+            </div>
+        </footer>
+    </div>
+
+    <script src="{{ base_url }}/vendors/@coreui/coreui/js/coreui.bundle.min.js"></script>
+    <script src="{{ base_url }}/vendors/simplebar/js/simplebar.min.js"></script>
+    <script src="{{ base_url }}/vendors/chart.js/js/chart.min.js"></script>
+
+    <script>
+        // Notificaciones interactivas flash
+        {% if flashes.success %}
+            Swal.fire({
+                icon: 'success',
+                title: '¡Operación Exitosa!',
+                text: '{{ flashes.success }}',
+                timer: 3000,
+                showConfirmButton: false
+            });
+        {% endif %}
+
+        {% if flashes.error %}
+            Swal.fire({
+                icon: 'error',
+                title: 'Atención',
+                text: '{{ flashes.error }}'
+            });
+        {% endif %}
+
+        {% if flashes.info %}
+            Swal.fire({
+                icon: 'info',
+                title: 'Información',
+                text: '{{ flashes.info }}',
+                timer: 3000,
+                showConfirmButton: false
+            });
+        {% endif %}
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

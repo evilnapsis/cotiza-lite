@@ -34,7 +34,7 @@ class CategoryData extends Extra{
 		Executor::doit($sql);
 	}
 	public function update(){
-		echo $sql = "update ".self::$tablename." set ".$this->getExtraFieldforUpdate()." where id=$this->id";
+		$sql = "update ".self::$tablename." set ".$this->getExtraFieldforUpdate()." where id=$this->id";
 		Executor::doit($sql);
 	}
 	public function updateById($k,$v){

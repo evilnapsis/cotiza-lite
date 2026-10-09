@@ -1,0 +1,58 @@
+{% extends "layouts/main.html.twig" %}
+{% block title %}Formas de Pago{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-0">Formas de Pago</h2>
+        <span class="text-muted">Métodos de cobro aceptados para las cotizaciones</span>
+    </div>
+    <a href="{{ base_url }}/forma/new" class="btn btn-primary shadow-sm">
+        <i class="bi bi-plus-circle me-1"></i> Nueva Forma de Pago
+    </a>
+</div>
+
+<div class="card shadow-sm border-0">
+    <div class="card-header bg-white py-3">
+        <h5 class="card-title mb-0 fw-bold"><i class="bi bi-wallet2 me-2 text-primary"></i>Listado de Formas de Pago</h5>
+    </div>
+    <div class="card-body p-0">
+        {% if formas|length > 0 %}
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-3" style="width: 100px;"># ID</th>
+                            <th>Método de Pago</th>
+                            <th class="text-end pe-3" style="width: 150px;">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for fo in formas %}
+                            <tr>
+                                <td class="ps-3 fw-bold">#{{ fo.id }}</td>
+                                <td>{{ fo.name }}</td>
+                                <td class="text-end pe-3">
+                                    <a href="{{ base_url }}/forma/{{ fo.id }}/edit" class="btn btn-warning btn-sm" title="Editar">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <form action="{{ base_url }}/forma/{{ fo.id }}/delete" method="POST" class="d-inline" onsubmit="return confirm('¿Seguro que deseas eliminar esta forma de pago?');">
+                                        {{ csrf_field() }}
+                                        <button type="submit" class="btn btn-danger btn-sm" title="Eliminar">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="p-4 text-center text-muted">
+                No hay formas de pago registradas.
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

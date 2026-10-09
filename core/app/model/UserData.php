@@ -80,12 +80,11 @@ class UserData extends Extra{
 	}
 
 
-	public static function getLike($q){
-		$sql = "select * from ".self::$tablename." where name like '%$q%'";
+	public static function getByUsernameOrEmail($val){
+		$sql = "select * from ".self::$tablename." where username=\"$val\" or email=\"$val\"";
 		$query = Executor::doit($sql);
-		return Model::many($query[0],new UserData());
+		return Model::one($query[0],new UserData());
 	}
-
 
 }
 

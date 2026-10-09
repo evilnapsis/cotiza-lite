@@ -19,7 +19,7 @@ class CotizationItemData extends Extra{
 	public function add(){
 
 		$sql = "insert into ".self::$tablename." (".$this->getExtraFieldNames().") ";
-		echo $sql .= "value (".$this->getExtraFieldValues().")";
+		$sql .= "value (".$this->getExtraFieldValues().")";
 		return Executor::doit($sql);
 	}
 

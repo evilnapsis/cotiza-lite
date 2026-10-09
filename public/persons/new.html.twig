@@ -1,0 +1,105 @@
+{% extends "layouts/main.html.twig" %}
+{% block title %}Nuevo Cliente{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-0">Nuevo Cliente</h2>
+        <span class="text-muted">Registro de datos fiscales y de contacto</span>
+    </div>
+    <a href="{{ base_url }}/clients" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left me-1"></i> Volver a Clientes
+    </a>
+</div>
+
+<div class="card shadow-sm border-0">
+    <div class="card-body p-4">
+        {% if errors %}
+            <div class="alert alert-danger">
+                <ul class="mb-0">
+                    {% for err in errors %}
+                        <li>{{ err }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        <form method="POST" action="{{ base_url }}/client/create">
+            {{ csrf_field() }}
+
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">Código Interno</label>
+                    <input type="text" name="code" class="form-control" value="{{ old.code }}" placeholder="CLI-001">
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">RFC</label>
+                    <input type="text" name="rfc" class="form-control" value="{{ old.rfc }}" placeholder="XAXX010101000">
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">Nombre / Razón Social <span class="text-danger">*</span></label>
+                    <input type="text" name="name" class="form-control" value="{{ old.name }}" required placeholder="Empresa S.A. de C.V.">
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">Apellidos (Opcional)</label>
+                    <input type="text" name="lastname" class="form-control" value="{{ old.lastname }}" placeholder="">
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">Email <span class="text-danger">*</span></label>
+                    <input type="email" name="email" class="form-control" value="{{ old.email }}" required placeholder="contacto@cliente.com">
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">Teléfono</label>
+                    <input type="text" name="phone" class="form-control" value="{{ old.phone }}" placeholder="(993) 123-4567">
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Contacto</label>
+                    <input type="text" name="contact" class="form-control" value="{{ old.contact }}" placeholder="Nombre del representante">
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Dirección Comercial</label>
+                    <input type="text" name="address" class="form-control" value="{{ old.address }}" placeholder="Calle, Número, Colonia">
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Ciudad</label>
+                    <select name="city_id" class="form-select">
+                        <option value="">-- SELECCIONE CIUDAD --</option>
+                        {% for c in cities %}
+                            <option value="{{ c.id }}" {% if old.city_id == c.id %}selected{% endif %}>{{ c.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Tipo de Crédito</label>
+                    <select name="credit_id" class="form-select">
+                        <option value="">-- SELECCIONE CRÉDITO --</option>
+                        {% for cr in credits %}
+                            <option value="{{ cr.id }}" {% if old.credit_id == cr.id %}selected{% endif %}>{{ cr.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-12">
+                    <label class="form-label fw-semibold">Comentarios / Notas</label>
+                    <textarea name="comments" class="form-control" rows="3" placeholder="Información adicional">{{ old.comments }}</textarea>
+                </div>
+
+                <div class="col-md-12 mt-4 text-end">
+                    <button type="submit" class="btn btn-primary px-4">
+                        <i class="bi bi-save me-1"></i> Guardar Cliente
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends "layouts/main.html.twig" %}
+{% block title %}Clientes{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-0">Clientes</h2>
+        <span class="text-muted">Directorio comercial y cartera de clientes</span>
+    </div>
+    <div>
+        <a href="{{ base_url }}/client/new" class="btn btn-primary shadow-sm">
+            <i class="bi bi-person-plus me-1"></i> Nuevo Cliente
+        </a>
+    </div>
+</div>
+
+<div class="card shadow-sm border-0">
+    <div class="card-header bg-white py-3">
+        <h5 class="card-title mb-0 fw-bold"><i class="bi bi-people me-2 text-primary"></i>Listado de Clientes</h5>
+    </div>
+    <div class="card-body p-0">
+        {% if clients|length > 0 %}
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-3">Código</th>
+                            <th>RFC</th>
+                            <th>Nombre / Razón Social</th>
+                            <th>Dirección</th>
+                            <th>Teléfono</th>
+                            <th>Ciudad</th>
+                            <th>Crédito</th>
+                            <th class="text-end pe-3">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for cli in clients %}
+                            <tr>
+                                <td class="ps-3 fw-semibold">{{ cli.code ?: ('#' ~ cli.id) }}</td>
+                                <td>{{ cli.rfc ?: '-' }}</td>
+                                <td class="fw-bold">{{ cli.name }} {{ cli.lastname }}</td>
+                                <td>{{ cli.address ?: '-' }}</td>
+                                <td>{{ cli.phone ?: '-' }}</td>
+                                <td><span class="badge bg-light text-dark border">{{ cli.city_name }}</span></td>
+                                <td><span class="badge bg-secondary">{{ cli.credit_name }}</span></td>
+                                <td class="text-end pe-3">
+                                    <a href="{{ base_url }}/client/{{ cli.id }}/edit" class="btn btn-warning btn-sm" title="Editar">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <form action="{{ base_url }}/client/{{ cli.id }}/delete" method="POST" class="d-inline" onsubmit="return confirm('¿Seguro que deseas eliminar este cliente?');">
+                                        {{ csrf_field() }}
+                                        <button type="submit" class="btn btn-danger btn-sm" title="Eliminar">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="p-5 text-center text-muted">
+                <i class="bi bi-person-x fs-1 d-block mb-3 text-secondary"></i>
+                <h5>No hay clientes registrados</h5>
+                <p class="mb-3">Agrega tu primer cliente para comenzar a cotizar.</p>
+                <a href="{{ base_url }}/client/new" class="btn btn-primary">
+                    <i class="bi bi-person-plus me-1"></i> Registrar Cliente
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
